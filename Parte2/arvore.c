@@ -84,23 +84,24 @@ void esvaziar(node_t **root, int num) {
     if (*root == NULL) return;
 
     if ((*root)->num == num) {
-        node_t *temp = *root;
-        if ((*root)->left == NULL && (*root)->right == NULL) {
-            free(temp);
-            *root = NULL;
-        } else if ((*root)->left == NULL) {
-            *root = (*root)->right;
-            free(temp);
-        } else if ((*root)->right == NULL) {
-            *root = (*root)->left;
-            free(temp);
-        }
+        liberarSubarvore(*root);
+        *root = NULL;
         return;
     }
-
     esvaziar(&(*root)->left, num);
     esvaziar(&(*root)->right, num);
 }
+
+
+void liberarSubarvore(node_t *root) {
+    if (root == NULL) return;
+
+    liberarSubarvore(root->left);
+    liberarSubarvore(root->right);
+    
+    free(root);
+}
+
 
 int altura(node_t *root) {
     if (root == NULL) {
@@ -122,7 +123,7 @@ int main() {
         printf("3. Inserir um elemento na árvore;\n");
         printf("4. Buscar um elemento na árvore;\n");
         printf("5. Mostrar todos os elementos da árvore;\n");
-        printf("6. Esvaziar a árvore ou alguma subárvore;\n");
+        printf("6. Remover um Nó e seus descendentes;\n");
         printf("7. Verificar a altura da árvore;\n");
         printf("8. Encerrar o programa;\n");
         printf("Opção: ");
@@ -174,6 +175,7 @@ int main() {
                     printf("1. Pré-ordem\n2. In-ordem\n3. Pós-ordem\n");
                     printf("Opção: ");
                     scanf("%d", &op2);
+                    printf(" ");
                     switch (op2) {
                         case 1:
                             imprimirPreOrdem(tree->root);
@@ -213,6 +215,8 @@ int main() {
 
             case 8:
                 printf("Programa encerrado.\n");
+                
+                free(tree);
                 break;
 
             default:
